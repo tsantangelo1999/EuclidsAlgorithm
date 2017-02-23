@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main
 {
@@ -8,7 +9,36 @@ public class Main
     {
 	    Scanner input = new Scanner(System.in);
         Scanner input2 = new Scanner(System.in);
-        System.out.println("Insert first number.");
+        ArrayList<Integer> nums = new ArrayList<>();
+        String in = "";
+        while(true)
+        {
+            System.out.println("Input a number to add a number, or recursive, iterative, or prime factorization to find the greatest common divisor");
+            in = input.nextLine();
+            if(in.equalsIgnoreCase("recursive") || in.equalsIgnoreCase("iterative") || in.equalsIgnoreCase("prime factorization"))
+                break;
+            try
+            {
+                int n = Integer.parseInt(in);
+                if(n < 0)
+                    throw new Exception();
+                nums.add(n);
+            }
+            catch(Exception e)
+            {
+                System.out.println("That is not a valid input.");
+            }
+        }
+
+        int gcf = 0;
+        if(in.equalsIgnoreCase("recursive"))
+            gcf = recursive(nums);
+        //else if(in.equalsIgnoreCase("iterative"))
+            //gcf = iteratively(nums);
+        //else
+            //gcf = primeFactorization(nums);
+        System.out.println("The greatest common divisor is " + gcf + ".");
+        /*System.out.println("Insert first number.");
         int n1;
         while(true)
         {
@@ -40,21 +70,25 @@ public class Main
                 System.out.println("That is not a valid input.");
             }
         }
-        System.out.println("Recursive or Iterative?");
+        System.out.println("Recursive, Iterative, or Prime Factorization?");
         String in = "";
-        while(!(in.equalsIgnoreCase("recursive") || in.equalsIgnoreCase("iterative")))
+        while(!(in.equalsIgnoreCase("recursive") || in.equalsIgnoreCase("iterative") || in.equalsIgnoreCase("prime factorization")))
         {
             in = input2.nextLine();
-            if(!(in.equalsIgnoreCase("recursive") || in.equalsIgnoreCase("iterative")))
+            if(!(in.equalsIgnoreCase("recursive") || in.equalsIgnoreCase("iterative") || in.equalsIgnoreCase("prime factorization")))
                 System.out.println("This is not a valid input.");
         }
         int gcf;
         if(in.equalsIgnoreCase("recursive"))
             gcf = recursive(n1, n2);
-        else
+        else if(in.equalsIgnoreCase("iterative"))
             gcf = iteratively(n1, n2);
+        else
+            gcf = primeFactorization(n1, n2);
         System.out.println("The greatest common divisor is " + gcf + ".");
+        */
     }
+
 
     public static int recursive(int n1, int n2)
     {
@@ -85,5 +119,71 @@ public class Main
             return n2;
         else
             return n1;
+    }
+
+    public static int primeFactorization(int n1, int n2)
+    {
+        ArrayList<Integer> n1List = getPrimeFactorization(n1);
+        ArrayList<Integer> n2List = getPrimeFactorization(n2);
+        ArrayList<Integer> common = new ArrayList<>();
+        while(n1List.size() > 0 && n2List.size() > 0)
+        {
+            if(n1List.get(0) == n2List.get(0))
+            {
+                common.add(n1List.get(0));
+                n1List.remove(0);
+                n2List.remove(0);
+            }
+            else if(n1List.get(0) < n2List.get(0))
+            {
+                n1List.remove(0);
+            }
+            else
+                n2List.remove(0);
+        }
+        int product = 1;
+        for(int i : common)
+            product *= i;
+        return product;
+    }
+
+    public static ArrayList<Integer> getPrimeFactorization(int n)
+    {
+        int x = 2;
+        ArrayList<Integer> list = new ArrayList<>();
+        while(n != 1)
+        {
+            if((double)n / x == Math.floor(n / x))
+            {
+                list.add(x);
+                n /= x;
+            }
+            else
+            {
+                x++;
+            }
+        }
+        return list;
+    }
+
+    public static int recursive(ArrayList<Integer> n)
+    {
+        int gcf = 0;
+        for(int i = 0; i < n.size(); i++)
+        {
+            gcf = recursive(gcf, n.get(i));
+        }
+        return gcf;
+    }
+
+    public static int iteratively(ArrayList<Integer> n)
+    {
+        return 0;
+    }
+
+    public static int primeFactorization(ArrayList<Integer> n)
+    {
+        ArrayList<Integer>[] num = new ArrayList[n.size()];
+        return 0;
     }
 }
