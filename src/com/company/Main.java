@@ -8,9 +8,8 @@ public class Main
     public static void main(String[] args)
     {
 	    Scanner input = new Scanner(System.in);
-        Scanner input2 = new Scanner(System.in);
         ArrayList<Integer> nums = new ArrayList<>();
-        String in = "";
+        String in;
         while(true)
         {
             System.out.println("Input a number to add a number, or recursive, iterative, or prime factorization to find the greatest common divisor");
@@ -29,16 +28,18 @@ public class Main
                 System.out.println("That is not a valid input.");
             }
         }
-
-        int gcf = 0;
+        int gcf;
         if(in.equalsIgnoreCase("recursive"))
             gcf = recursive(nums);
-        //else if(in.equalsIgnoreCase("iterative"))
-            //gcf = iteratively(nums);
-        //else
-            //gcf = primeFactorization(nums);
+        else if(in.equalsIgnoreCase("iterative"))
+            gcf = iteratively(nums);
+        else
+            gcf = primeFactorization(nums);
         System.out.println("The greatest common divisor is " + gcf + ".");
-        /*System.out.println("Insert first number.");
+        /*
+        OLD WAY WITH TWO NUMBERS (LAME)
+
+        System.out.println("Insert first number.");
         int n1;
         while(true)
         {
@@ -169,21 +170,56 @@ public class Main
     public static int recursive(ArrayList<Integer> n)
     {
         int gcf = 0;
-        for(int i = 0; i < n.size(); i++)
-        {
-            gcf = recursive(gcf, n.get(i));
-        }
+        for(int i : n)
+            gcf = recursive(gcf, i);
         return gcf;
     }
 
     public static int iteratively(ArrayList<Integer> n)
     {
-        return 0;
+        int gcf = 0;
+        for(int i : n)
+            gcf = iteratively(gcf, i);
+        return gcf;
     }
 
     public static int primeFactorization(ArrayList<Integer> n)
     {
         ArrayList<Integer>[] num = new ArrayList[n.size()];
-        return 0;
+        for(int i = 0; i < num.length; i++)
+            num[i] = getPrimeFactorization(n.get(i));
+        ArrayList<Integer> primes = new ArrayList<>();
+        top:
+        while(true)
+        {
+            for(ArrayList<Integer> a : num)
+                if(a.size() == 0)
+                    break top;
+            int number = num[0].get(0);
+            boolean isPrime = true;
+            for(int i = 1; i < num.length; i++)
+            {
+                if(num[i].get(0) < number)
+                {
+                    num[i].remove(0);
+                    isPrime = false;
+                }
+                if(num[i].get(0) > number)
+                {
+                    num[0].remove(0);
+                    continue top;
+                }
+            }
+            if(isPrime)
+            {
+                primes.add(num[0].get(0));
+                for(ArrayList<Integer> a : num)
+                    a.remove(0);
+            }
+        }
+        int product = 1;
+        for(int i : primes)
+            product *= i;
+        return product;
     }
 }
